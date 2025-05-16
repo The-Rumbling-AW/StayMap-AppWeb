@@ -43,23 +43,22 @@ export default {
     };
   },
   methods: {
-    async handleLogin() {
-      this.error = '';
-      try {
-        const response = await this.userService.getByEmail(this.email);
-        const user = response.data.find(u => u.password === this.password);
+   async handleLogin() {
+  this.error = '';
+  try {
+    const user = await this.userService.getByEmail(this.email);
 
-        if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
-          this.$router.push({ name: 'communities' });
-        } else {
-          this.error = 'Credenciales incorrectas';
-        }
-      } catch (e) {
-        this.error = 'Error al autenticar';
-        console.error(e);
-      }
+    if (user && user.password === this.password) {
+      localStorage.setItem('user', JSON.stringify(user));
+      this.$router.push({ name: 'communities' });
+    } else {
+      this.error = 'Credenciales incorrectas';
     }
+  } catch (e) {
+    this.error = 'Error al autenticar';
+    console.error(e);
+  }
+}
   }
 };
 </script>
