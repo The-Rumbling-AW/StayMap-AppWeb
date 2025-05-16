@@ -1,10 +1,10 @@
 import { Community } from '@/community/model/community.entity';
 
 export class CommunityService {
-  resourceEndpoint = import.meta.env.VITE_COMMUNITIES_ENDPOINT_PATH || '/db.json';
+  resourceEndpoint = '/db.json'; // Carga el archivo estático
 
   /**
-   * Recupera todas las comunidades desde el archivo db.json en /public
+   * Recupera todas las comunidades
    * @returns {Promise<Array<Community>>}
    */
   async getAll() {
@@ -24,21 +24,11 @@ export class CommunityService {
     }
   }
 
-  /**
-   * Recupera una comunidad por ID
-   * @param {string} id
-   * @returns {Promise<Community|null>}
-   */
   async getById(id) {
     const communities = await this.getAll();
     return communities.find(c => c.id === id) || null;
   }
 
-  /**
-   * Busca comunidades por nombre (case-insensitive)
-   * @param {string} name
-   * @returns {Promise<Array<Community>>}
-   */
   async getByName(name) {
     const communities = await this.getAll();
     return communities.filter(c =>
@@ -46,21 +36,18 @@ export class CommunityService {
     );
   }
 
-  /**
-   * No disponible en modo estático
-   */
   create() {
-    console.warn('⚠ Método no implementado para archivo JSON local.');
+    console.warn('⚠ Crear comunidades no está disponible en modo lectura.');
     return Promise.reject('Método no implementado.');
   }
 
   update() {
-    console.warn('⚠ Método no implementado para archivo JSON local.');
+    console.warn('⚠ Editar comunidades no está disponible en modo lectura.');
     return Promise.reject('Método no implementado.');
   }
 
   delete() {
-    console.warn('⚠ Método no implementado para archivo JSON local.');
+    console.warn('⚠ Eliminar comunidades no está disponible en modo lectura.');
     return Promise.reject('Método no implementado.');
   }
 }
