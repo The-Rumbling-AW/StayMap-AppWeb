@@ -1,40 +1,38 @@
-import httpInstance from "../../shared/services/http.instance.js";
-
-/**
- * @class UserService
- * @description Service class for handling CRUD operations on users using HTTP requests
- */
 export class UserService {
-    /** @type {string} The API endpoint for users */
-    resourceEndpoint = import.meta.env.VITE_USERS_ENDPOINT_PATH;
+  resourceEndpoint = '/db.json'; // lee desde el archivo estático
 
-    /** Get all users */
-    getAll() {
-        return httpInstance.get(this.resourceEndpoint);
-    }
+  /** Obtiene todos los usuarios */
+  async getAll() {
+    const res = await fetch(this.resourceEndpoint);
+    const data = await res.json();
+    return data.users || [];
+  }
 
-    /** Get a user by ID */
-    getById(id) {
-        return httpInstance.get(`${this.resourceEndpoint}/${id}`);
-    }
+  /** Obtiene un usuario por ID */
+  async getById(id) {
+    const users = await this.getAll();
+    return users.find(u => u.id == id) || null;
+  }
 
-    /** Create a new user */
-    create(user) {
-        return httpInstance.post(this.resourceEndpoint, user);
-    }
+  /** Buscar usuario por email (para login) */
+  async getByEmail(email) {
+    const users = await this.getAll();
+    return users.find(u => u.email === email) || null;
+  }
 
-    /** Update a user */
-    update(id, user) {
-        return httpInstance.put(`${this.resourceEndpoint}/${id}`, user);
-    }
+  /** Métodos no disponibles en modo lectura */
+  create() {
+    console.warn('⚠ Crear usuario no disponible en modo lectura.');
+    return Promise.reject('Método no implementado.');
+  }
 
-    /** Delete a user */
-    delete(id) {
-        return httpInstance.delete(`${this.resourceEndpoint}/${id}`);
-    }
+  update() {
+    console.warn('⚠ Editar usuario no disponible en modo lectura.');
+    return Promise.reject('Método no implementado.');
+  }
 
-    /** Find user by email (login helper) */
-    getByEmail(email) {
-        return httpInstance.get(`${this.resourceEndpoint}?email=${email}`);
-    }
+  delete() {
+    console.warn('⚠ Eliminar usuario no disponible en modo lectura.');
+    return Promise.reject('Método no implementado.');
+  }
 }
